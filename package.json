@@ -1,0 +1,30 @@
+{
+  "name": "argo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ndkrikun/argo.git"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.53",
+    "@types/websocket": "0.0.35",
+    "delay": "^2.0.0",
+    "import-export": "^1.0.1",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1",
+    "websocket": "^1.0.25"
+  },
+  "author": "n.krikun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ndkrikun/argo/issues"
+  },
+  "homepage": "https://github.com/ndkrikun/argo#readme"
+}
