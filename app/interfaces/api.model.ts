@@ -9,3 +9,5 @@ export interface ApiResponse<T> {
   method: string;
   params: T;
 }
+
+export type RestApiMethod = 'GET' | 'POST';

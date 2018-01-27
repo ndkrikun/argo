@@ -1,15 +1,12 @@
-import { TickerService } from './ticker';
-import { CandlesService } from './candels';
+import { TickersAPI } from './tickers';
+import { CandlesAPI } from './candels';
 import { CurrenciesParams } from '../interfaces/currency.model';
 
 const currencies: CurrenciesParams = {
-  from: 'ETH',
-  to: 'BTC'
+  base: 'ETH',
+  quote: 'BTC'
 };
 
-const ticker = new TickerService(currencies);
+export const tickersAPI = new TickersAPI(currencies);
 
-
-// const candels = new CandlesService(currencies)
-
-// candels.getCandels();
+export const candlesAPI = new CandlesAPI(currencies);

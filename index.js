@@ -1,2 +1,3 @@
-require('import-export')
-require('./app/server')
+require('import-export');
+
+require('./app/index');

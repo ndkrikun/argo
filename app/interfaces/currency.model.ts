@@ -33,7 +33,7 @@ export interface Ticker {
   symbol: TickerSymbol;
 }
 
-export interface Candel {
+export interface Candle {
   timestamp: Date;
   open: number;
   close: number;
@@ -44,6 +44,6 @@ export interface Candel {
 }
 
 export interface CurrenciesParams {
-  from: CurrencyId,
-  to: CurrencyId
+  base: CurrencyId,
+  quote: CurrencyId
 }

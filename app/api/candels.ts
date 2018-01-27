@@ -1,7 +1,8 @@
 import { restMethodsKeys } from '../keys/methods';
-import { CurrenciesParams, TickerSymbol, Candel } from '../interfaces/currency.model';
+import { CurrenciesParams, TickerSymbol, Candle } from '../interfaces/currency.model';
 import axios, { AxiosResponse } from 'axios';
-import { REST_API_PATH } from '../keys/main';
+import { REST_API_PATH, CANDLES_PERIOD } from '../keys/main';
+import { RestApiMethod } from '../interfaces/api.model';
 
 const QueryString = require('query-string')
 
@@ -10,25 +11,27 @@ interface ApiCandelsParams {
   period: string;
 }
 
-export class CandlesService {
+export class CandlesAPI {
   private readonly eventName = restMethodsKeys.GET_CANDELS;
-  private readonly limit: number = 100;
-  private readonly period: string = 'M3';
+  private readonly method: RestApiMethod = 'GET';
+
+  private readonly period: string = CANDLES_PERIOD;
 
   constructor(
-    private readonly params: CurrenciesParams,
-  ) {
-  }
+    private readonly currencies: CurrenciesParams
+  ) {}
 
   private get symbol(): TickerSymbol {
     return (
-      this.params.from + this.params.to
+      this.currencies.base + this.currencies.quote
     ) as TickerSymbol
   }
 
-  private get apiParams(): ApiCandelsParams {
+  private apiParams(
+    quantity: number
+  ): ApiCandelsParams {
     return {
-      limit: this.limit,
+      limit: quantity,
       period: this.period
     };
   }
@@ -39,16 +42,18 @@ export class CandlesService {
     );
   }
 
-  public getCandels() {
-    const method = 'GET';
-    const url = this.requestUrl;
-
-    console.log(this.requestUrl, this.apiParams)
-
-    axios.get(this.requestUrl, { params: this.apiParams })
-    .then((response) => {
-      console.log(response.data);
-    })
+  public getCandels(
+    quantity: number = 1
+  ) {
+    return new Promise<Candle[]>(resolve => {
+      axios.get<Candle[]>(
+        this.requestUrl,
+        { params: this.apiParams(quantity) }
+      )
+      .then((response) => {
+        resolve(response.data);
+      })
+    });
   }
 
 }

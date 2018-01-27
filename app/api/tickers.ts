@@ -1,5 +1,5 @@
 import { Currency, CurrencyId, CurrenciesParams, TickerSymbol, Ticker } from '../interfaces/currency.model';
-import { WS_API_PATH } from '../keys/main';
+import { WS_API_PATH, DEFAULT_ID } from '../keys/main';
 import { w3cwebsocket as WebSocket } from 'websocket';
 import { Socket } from 'dgram';
 import { ApiResponse, ApiError } from '../interfaces/api.model';
@@ -12,21 +12,19 @@ interface ApiTickerParams {
   id: number;
 }
 
-export class TickerService {
-  private soket = new WebSocket(WS_API_PATH);
-  private responseData: ApiResponse<Ticker>;
-
+export class TickersAPI {
+  private readonly soket = new WebSocket(WS_API_PATH);
   private readonly eventName = wsMethodsKeys.SUBSCRIBE_TICKER;
+
+  public tickerData: Ticker | null = null;
   
   constructor(
-    private params: CurrenciesParams
-  ) {
-    this.openTickerSoket();
-  }
+    private currencies: CurrenciesParams
+  ) {}
 
   private get symbol(): TickerSymbol {
     return (
-      this.params.from + this.params.to
+      this.currencies.base + this.currencies.quote
     ) as TickerSymbol;
   }
 
@@ -36,26 +34,21 @@ export class TickerService {
       params: {
         symbol: this.symbol
       },
-      id: 123
+      id: DEFAULT_ID
     }
   }
 
-  private openTickerSoket(): void {
+  public init(): void {
     this.soket.onopen = event => {
       this.soket.send(
         JSON.stringify(this.apiParams)
       );
     }
-    
     this.soket.onmessage = event => {
-      this.responseData = JSON.parse(event.data);
-      // console.log(Object.keys(this.responseData))
+      const response: ApiResponse<Ticker> = JSON.parse(event.data);
+      if ('params' in response) {
+        this.tickerData = response.params;
+      }
     }
-  }
-
-  public get tickerData(): Ticker | null {
-    return !!this.responseData && 'params' in this.responseData
-      ? this.responseData.params
-      : null;
   }
 }
