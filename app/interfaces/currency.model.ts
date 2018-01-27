@@ -1,11 +1,15 @@
-export type CurrencySymbol = (
-  'ETH' |
+export type CurrencyId = (
   'BTC' |
-  'ETHBTC'
+  'ETH'
+)
+
+export type TickerSymbol = (
+  'ETHBTC' |
+  'BTCETH'
 );
 
 export interface Currency {
-  id: CurrencySymbol;
+  id: CurrencyId;
   fullName: string;
   crypto: boolean;
   payinEnabled: boolean;
@@ -16,7 +20,7 @@ export interface Currency {
   transferEnabled: boolean;
 }
 
-export interface CurrencyTicker {
+export interface Ticker {
   ask: number;
   bid: number;
   last: number;
@@ -26,5 +30,20 @@ export interface CurrencyTicker {
   volume: number;
   volumeQuote: number;
   timestamp: Date;
-  symbol: CurrencySymbol;
+  symbol: TickerSymbol;
+}
+
+export interface Candel {
+  timestamp: Date;
+  open: number;
+  close: number;
+  min: number;
+  max: number;
+  volume: number;
+  volumeQuote: number;
+}
+
+export interface CurrenciesParams {
+  from: CurrencyId,
+  to: CurrencyId
 }

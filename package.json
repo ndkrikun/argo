@@ -13,10 +13,11 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.53",
-    "@types/websocket": "0.0.35",
+    "axios": "^0.17.1",
     "delay": "^2.0.0",
     "import-export": "^1.0.1",
     "nodemon": "^1.12.1",
+    "query-string": "^5.0.1",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.1",
     "websocket": "^1.0.25"

@@ -4,9 +4,8 @@ export interface ApiError {
   description: string;
 }
 
-export interface ApiResponse {
+export interface ApiResponse<T> {
   jsonrpc: string;
-  result?: object;
-  error?: ApiError;
-  id: number
+  method: string;
+  params: T;
 }
