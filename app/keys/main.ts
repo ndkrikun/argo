@@ -6,6 +6,12 @@ export const DEFAULT_ID: number = 123;
 
 export const ACCESS_TOKEN: string = 'asdfa3ofaasodfai32iasdfasf';
 
+export const TG_TOKEN: string = '538794728:AAH9p99NRQ6fCpzXC8YKsAjr8ZxK4ri58SI';
+
+export const TG_API_PATH: string = `https://api.telegram.org/bot${TG_TOKEN}`;
+
+export const TG_CHAT_ID: string = '-246951427';
+
 
 /**
  * One of: M1 (one minute), M3, M5, M15, M30, H1, H4, D1, D7, 1M (one month).

@@ -1,4 +1,4 @@
-import { candlesAPI } from './api/index';
+import { candlesAPI, telegramBot } from './api/index';
 import { CANDLES_QUANTITY, MS_INTERVAL } from './keys/main';
 import { Candle } from './interfaces/currency.model';
 import { CandlesAPI } from './api/candels';
@@ -20,7 +20,9 @@ export class Program {
 
   private async implementStep() {
     await this.updateCandles()
-    console.log(this.lastCandle);
+    telegramBot.sendMessage(
+      JSON.stringify(this.lastCandle)
+    )
   }
 
   private get lastCandle(): Candle {
@@ -33,8 +35,10 @@ export class Program {
     this.candlesCollection = await candlesAPI.getCandels(
       CANDLES_QUANTITY
     );
-    
-    console.log(this.lastCandle);
+
+    telegramBot.sendMessage(
+      JSON.stringify(this.lastCandle)
+    )
 
     this.timer = setInterval(
       () => this.implementStep(),

@@ -10,18 +10,22 @@ interface RestMethodsKeys {
   GET_CANDELS: string;
 }
 
-const SUBSCRIBE_TICKER = 'subscribeTicker';
-
-const GET_CURRENCY = '/currency';
-const GET_SYMBOL = '/symbol';
-const GET_CANDELS = '/candles';
+interface TgBotMethodsKeys {
+  GET_UPDATES: string;
+  SEND_MESSAGE: string;
+}
 
 export const wsMethodsKeys: WsMethodsKeys = {
-  SUBSCRIBE_TICKER,
+  SUBSCRIBE_TICKER: 'subscribeTicker',
 }
 
 export const restMethodsKeys: RestMethodsKeys = {
-  GET_CURRENCY,
-  GET_SYMBOL,
-  GET_CANDELS,
+  GET_CURRENCY: '/currency',
+  GET_SYMBOL: '/symbol',
+  GET_CANDELS: '/candles',
+}
+
+export const tgBotMethodsKeys: TgBotMethodsKeys = {
+  GET_UPDATES: '/getUpdates',
+  SEND_MESSAGE: '/sendMessage',
 }
