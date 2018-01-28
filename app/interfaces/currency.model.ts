@@ -34,13 +34,13 @@ export interface Ticker {
 }
 
 export interface Candle {
-  timestamp: Date;
-  open: number;
-  close: number;
-  min: number;
-  max: number;
-  volume: number;
-  volumeQuote: number;
+  timestamp: string;
+  open: string;
+  close: string;
+  min: string;
+  max: string;
+  volume: string;
+  volumeQuote: string;
 }
 
 export interface CurrenciesParams {
