@@ -53,7 +53,7 @@ export class Program {
     if (this.isTrendChanged(solution)) {
       const trend = this.defineTrend(solution);
       telegramBot.sendMessage(
-        `${trend} The trend was changed! From ${solution[0]} to ${solution[1]}. Currency pair: ${CURRENCIES_PAIR.base}${CURRENCIES_PAIR.quote}`
+        `${trend} The trend was changed! From ${solution[0]} to ${solution[1]}. Currency pair: ${CURRENCIES_PAIR.base}${CURRENCIES_PAIR.quote}. Open price: ${this.lastCandle.open}. Close price: ${this.lastCandle.close}. Time stamp: ${this.lastCandle.timestamp}.`
       )
     }
   }

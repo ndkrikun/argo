@@ -16,7 +16,7 @@ export const TG_CHAT_ID: string = '-246951427';
 
 export const CURRENCIES_PAIR: CurrenciesParams = {
   base: 'ETH',
-  quote: 'BTC'
+  quote: 'USD'
 };
 
 

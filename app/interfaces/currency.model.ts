@@ -1,11 +1,13 @@
 export type CurrencyId = (
   'BTC' |
-  'ETH'
+  'ETH' |
+  'USD'
 )
 
 export type TickerSymbol = (
   'ETHBTC' |
-  'BTCETH'
+  'BTCETH' |
+  'ETHUSD'
 );
 
 export interface Currency {
