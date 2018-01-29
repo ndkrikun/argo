@@ -14,6 +14,8 @@ export const TG_API_PATH: string = `https://api.telegram.org/bot${TG_TOKEN}`;
 
 export const TG_CHAT_ID: string = '-246951427';
 
+export const TG_TEST_CHAT_ID: string = '-291598333';
+
 export const CURRENCIES_PAIR: CurrenciesParams = {
   base: 'ETH',
   quote: 'BTC'

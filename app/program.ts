@@ -1,13 +1,14 @@
 import { candlesAPI, telegramBot } from './api/index';
-import { CANDLES_QUANTITY, MS_INTERVAL, CURRENCIES_PAIR } from './keys/main';
+import { CANDLES_QUANTITY, MS_INTERVAL, TG_TEST_CHAT_ID, TG_CHAT_ID } from './keys/main';
 import { Candle } from './interfaces/currency.model';
-import { CandlesAPI } from './api/candels';
-import { setInterval } from 'timers';
+import { setInterval, clearInterval } from 'timers';
 import { macdSignal } from './algorithms/index';
+import { messageService } from './helpers/index';
 
 export class Program {
   private candlesCollection: Candle[];
-  private timer;
+  private waitingTimer: NodeJS.Timer;
+  private programTimer: NodeJS.Timer;
 
   constructor() {
     this.init();
@@ -36,13 +37,10 @@ export class Program {
     return (solution[0] * solution[1]) < 0
   }
 
-  private defineTrend(
+  private isPositiveTrend(
     solution: number[]
-  ): string {
-    if (solution[0] < solution[1]) {
-      return 'Buy!'
-    }
-    return 'Sell!';
+  ): boolean {
+    return solution[0] < solution[1];
   }
 
   private analyze(): void {
@@ -50,22 +48,59 @@ export class Program {
       this.candlesCollection
     );
 
+    const message = messageService.candleMessage(
+      this.lastCandle,
+      solution
+    )
+    telegramBot.sendMessage(message, TG_TEST_CHAT_ID)
+
     if (this.isTrendChanged(solution)) {
-      const trend = this.defineTrend(solution);
-      telegramBot.sendMessage(
-        `${trend} The trend was changed! From ${solution[0]} to ${solution[1]}. Currency pair: ${CURRENCIES_PAIR.base}${CURRENCIES_PAIR.quote}. Open price: ${this.lastCandle.open}. Close price: ${this.lastCandle.close}. Time stamp: ${this.lastCandle.timestamp}.`
+      const message = messageService.trendMessage(
+        this.lastCandle,
+        solution,
+        this.isPositiveTrend(solution)
       )
+      telegramBot.sendMessage(message, TG_CHAT_ID)
     }
   }
 
-  private async init(): Promise<void> {
+  private get readyToStart() {
+    const second = new Date().getSeconds();
+    return (second === 0
+      ||    second === 1);
+  }
+
+  private waitingStep() {
+    if (this.readyToStart) {
+      clearInterval(this.waitingTimer);
+      this.start()
+    }
+  }
+
+  private init() {
+    telegramBot.sendMessage(messageService.startServer, TG_TEST_CHAT_ID)
+
+    if (this.readyToStart) {
+      this.start();
+    } else {
+      telegramBot.sendMessage(messageService.waiting, TG_TEST_CHAT_ID)
+      this.waitingTimer = setInterval(
+        () => this.waitingStep(),
+        1000
+      )
+    }
+  }
+  
+  private async start(): Promise<void> {
+    telegramBot.sendMessage(messageService.startProgram, TG_TEST_CHAT_ID)
+
     this.candlesCollection = await candlesAPI.getCandels(
       CANDLES_QUANTITY
     );
-
+  
     this.analyze();
-
-    this.timer = setInterval(
+  
+    this.programTimer = setInterval(
       () => this.implementStep(),
       MS_INTERVAL
     );

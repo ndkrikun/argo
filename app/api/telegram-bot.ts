@@ -11,9 +11,12 @@ export class TelegramBot {
     })
   }
 
-  public sendMessage(message: string): void {
+  public sendMessage(
+    message: string,
+    chatId: string
+  ): void {
     axios.get(
-      `${TG_API_PATH}${tgBotMethodsKeys.SEND_MESSAGE}?chat_id=${TG_CHAT_ID}&text=${message}`
+      `${TG_API_PATH}${tgBotMethodsKeys.SEND_MESSAGE}?chat_id=${chatId}&text=${message}&parse_mode=HTML`
     );
   }
 }
