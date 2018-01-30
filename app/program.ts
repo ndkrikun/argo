@@ -1,5 +1,5 @@
 import { candlesAPI, telegramBot } from './api/index';
-import { CANDLES_QUANTITY, MS_INTERVAL, TG_TEST_CHAT_ID, TG_CHAT_ID } from './keys/main';
+import { MS_INTERVAL, TG_TEST_CHAT_ID, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY } from './keys/main';
 import { Candle } from './interfaces/currency.model';
 import { setInterval, clearInterval } from 'timers';
 import { macdSignal } from './algorithms/index';
@@ -16,7 +16,6 @@ export class Program {
 
   private async updateCandles(): Promise<void> {
     const newCandle: Candle[] = await candlesAPI.getCandels()
-    this.candlesCollection.splice(0, 1)
     this.candlesCollection.push(newCandle[0]);
   }
 
@@ -95,7 +94,7 @@ export class Program {
     telegramBot.sendMessage(messageService.startProgram, TG_TEST_CHAT_ID)
 
     this.candlesCollection = await candlesAPI.getCandels(
-      CANDLES_QUANTITY
+      CANDLES_INITIAL_QUANTITY
     );
   
     this.analyze();

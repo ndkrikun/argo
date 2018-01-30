@@ -32,7 +32,7 @@ const MINUTES_INTERVAL = 1;
 
 export const MS_INTERVAL: number = 1000 * 60 * MINUTES_INTERVAL;
 
-// export const CANDLES_QUANTITY: number = (12 * 60) / MINUTES_INTERVAL; // For 12 hrs
-export const CANDLES_QUANTITY = 40;
+// export const CANDLES_INITIAL_QUANTITY: number = (12 * 60) / MINUTES_INTERVAL; // For 12 hrs
+export const CANDLES_INITIAL_QUANTITY: number = 100;
 
 export const CANDLES_PERIOD: CandlesPeriod = `M${MINUTES_INTERVAL}` as CandlesPeriod;

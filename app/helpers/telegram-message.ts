@@ -1,5 +1,5 @@
 import { Candle } from '../interfaces/currency.model';
-import { CURRENCIES_PAIR, CANDLES_QUANTITY } from '../keys/main';
+import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 
 export class MessageService {
   private trendAction(
@@ -47,6 +47,6 @@ export class MessageService {
   }
 
   public get startProgram(): string {
-    return `\xF0\x9F\x93\xA2 The last <b>${CANDLES_QUANTITY}</b> candles was fetched.\n\n \xF0\x9F\x91\xBE Starting the bot...`
+    return `\xF0\x9F\x93\xA2 The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles was fetched.\n\n \xF0\x9F\x91\xBE Starting the bot...`
   }
 }
