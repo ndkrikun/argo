@@ -1,4 +1,5 @@
-import { candlesAPI, telegramBot } from './api/index';
+import { candlesAPI } from './api-hitbtc/index';
+import { telegramBot } from './api-telegram/index';
 import { MS_INTERVAL, TG_TEST_CHAT_ID, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY } from './keys/main';
 import { Candle } from './interfaces/currency.model';
 import { setInterval, clearInterval } from 'timers';

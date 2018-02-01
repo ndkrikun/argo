@@ -1,13 +1,24 @@
 import { CurrenciesParams } from "../interfaces/currency.model";
 
+/**
+ * HIT BTC API KEYS
+ */
+
+export const PUBLIC_API_TOKEN: string = 'f5150f1c0b4f407a0f14247fd487f89e';
+
+export const SECRET_API_TOKEN: string = 'cd5f4b960c4bd4032682f018a80f7d9e';
+
 export const WS_API_PATH: string = 'wss://api.hitbtc.com/api/2/ws';
 
 export const REST_API_PATH: string =  'https://api.hitbtc.com/api/2/public';
 
+export const PERSONALIZED_REST_API_PATH: string = `https://${PUBLIC_API_TOKEN}:${SECRET_API_TOKEN}@api.hitbtc.com/api/2`
+
 export const DEFAULT_ID: number = 123;
 
-export const ACCESS_TOKEN: string = 'asdfa3ofaasodfai32iasdfasf';
-
+/**
+ * TELEGRAM BOT API KEYS
+ */
 export const TG_TOKEN: string = '538794728:AAH9p99NRQ6fCpzXC8YKsAjr8ZxK4ri58SI';
 
 export const TG_API_PATH: string = `https://api.telegram.org/bot${TG_TOKEN}`;

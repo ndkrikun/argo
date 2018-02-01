@@ -1,5 +1,3 @@
-
-
 interface WsMethodsKeys {
   SUBSCRIBE_TICKER: string;
 }

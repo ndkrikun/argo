@@ -1,5 +1,5 @@
 import { restMethodsKeys } from '../keys/methods';
-import { CurrenciesParams, TickerSymbol, Candle } from '../interfaces/currency.model';
+import { CurrenciesParams, Symbol, Candle } from '../interfaces/currency.model';
 import axios, { AxiosResponse } from 'axios';
 import { REST_API_PATH, CANDLES_PERIOD } from '../keys/main';
 import { RestApiMethod } from '../interfaces/api.model';
@@ -21,10 +21,10 @@ export class CandlesAPI {
     private readonly currencies: CurrenciesParams
   ) {}
 
-  private get symbol(): TickerSymbol {
+  private get symbol(): Symbol {
     return (
       this.currencies.base + this.currencies.quote
-    ) as TickerSymbol
+    ) as Symbol
   }
 
   private apiParams(
