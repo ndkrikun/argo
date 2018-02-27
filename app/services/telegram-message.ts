@@ -1,13 +1,14 @@
 import { Candle } from '../interfaces/currency.model';
 import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 import { emojiCollection } from '../keys/emoji';
-import { orderTypeCollection, OrderType } from '../keys/order';
+import { orderSideCollection } from '../keys/order';
+import { OrderSide } from '../interfaces/order.model';
 
 export class MessageService {
   private trendAction(
     isPositiveTrend
-  ) {
-    const orderType: OrderType = isPositiveTrend ? orderTypeCollection.BUY : orderTypeCollection.SELL;
+  ): string {
+    const orderType: OrderSide = isPositiveTrend ? orderSideCollection.BUY : orderSideCollection.SELL;
     const orderTypeEmoji = isPositiveTrend ? emojiCollection.BUY : emojiCollection.SELL;
     return `${orderTypeEmoji} ${orderType.toUpperCase()}!`;
   }

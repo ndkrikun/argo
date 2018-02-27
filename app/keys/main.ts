@@ -1,4 +1,4 @@
-import { CurrenciesParams } from "../interfaces/currency.model";
+import { CurrenciesParams } from '../interfaces/currency.model';
 
 /**
  * HIT BTC API KEYS
@@ -12,7 +12,7 @@ export const WS_API_PATH: string = 'wss://api.hitbtc.com/api/2/ws';
 
 export const REST_API_PATH: string =  'https://api.hitbtc.com/api/2/public';
 
-export const PERSONALIZED_REST_API_PATH: string = `https://${PUBLIC_API_TOKEN}:${SECRET_API_TOKEN}@api.hitbtc.com/api/2`
+export const AUTH_REST_API_PATH: string = `https://${PUBLIC_API_TOKEN}:${SECRET_API_TOKEN}@api.hitbtc.com/api/2`
 
 export const DEFAULT_ID: number = 123;
 
@@ -27,11 +27,14 @@ export const TG_CHAT_ID: string = '-246951427';
 
 export const TG_TEST_CHAT_ID: string = '-291598333';
 
+/**
+ * APP SETTINGS
+ */
+
 export const CURRENCIES_PAIR: CurrenciesParams = {
   base: 'ETH',
   quote: 'USD'
 };
-
 
 /**
  * One of: M1 (one minute), M3, M5, M15, M30, H1, H4, D1, D7, 1M (one month).

@@ -1,8 +1,9 @@
 import { restMethodsKeys } from '../keys/methods';
-import { CurrenciesParams, Symbol, Candle } from '../interfaces/currency.model';
+import { CurrenciesParams, CurrencySymbol, Candle } from '../interfaces/currency.model';
 import axios, { AxiosResponse } from 'axios';
 import { REST_API_PATH, CANDLES_PERIOD } from '../keys/main';
 import { RestApiMethod } from '../interfaces/api.model';
+import { getSymbol } from '../services/helpers';
 
 const QueryString = require('query-string')
 
@@ -21,13 +22,11 @@ export class CandlesAPI {
     private readonly currencies: CurrenciesParams
   ) {}
 
-  private get symbol(): Symbol {
-    return (
-      this.currencies.base + this.currencies.quote
-    ) as Symbol
+  private get symbol(): CurrencySymbol {
+    return getSymbol(this.currencies);
   }
 
-  private apiParams(
+  private getParams(
     quantity: number
   ): ApiCandelsParams {
     return {
@@ -48,7 +47,7 @@ export class CandlesAPI {
     return new Promise<Candle[]>(resolve => {
       axios.get<Candle[]>(
         this.requestUrl,
-        { params: this.apiParams(quantity) }
+        { params: this.getParams(quantity) }
       )
       .then((response) => {
         resolve(response.data);

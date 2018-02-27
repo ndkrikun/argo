@@ -1,4 +1,4 @@
-import { Currency, CurrencyId, CurrenciesParams, Symbol, Ticker } from '../interfaces/currency.model';
+import { Currency, CurrencyId, CurrenciesParams, CurrencySymbol, Ticker } from '../interfaces/currency.model';
 import { WS_API_PATH, DEFAULT_ID } from '../keys/main';
 import { w3cwebsocket as WebSocket } from 'websocket';
 import { Socket } from 'dgram';
@@ -22,10 +22,10 @@ export class TickersAPI {
     private currencies: CurrenciesParams
   ) {}
 
-  private get symbol(): Symbol {
+  private get symbol(): CurrencySymbol {
     return (
       this.currencies.base + this.currencies.quote
-    ) as Symbol;
+    ) as CurrencySymbol;
   }
 
   private get apiParams(): ApiTickerParams {

@@ -4,7 +4,7 @@ export type CurrencyId = (
   'USD'
 )
 
-export type Symbol = (
+export type CurrencySymbol = (
   'ETHBTC' |
   'BTCETH' |
   'ETHUSD'
@@ -32,7 +32,7 @@ export interface Ticker {
   volume: number;
   volumeQuote: number;
   timestamp: Date;
-  symbol: Symbol;
+  symbol: CurrencySymbol;
 }
 
 export interface Candle {

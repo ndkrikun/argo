@@ -61,7 +61,7 @@ export class MacdSignal {
   private differential(
     short: number[],
     long: number[]
-  ) {
+  ): number[] {
     const diff = long.length - short.length;
     const shortArr = short;
     const longArr = long.filter((el, index) => index >= diff);

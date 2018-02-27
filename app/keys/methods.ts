@@ -6,6 +6,7 @@ interface RestMethodsKeys {
   GET_CURRENCY: string;
   GET_SYMBOL: string;
   GET_CANDELS: string;
+  CREATE_ORDER: string;
 }
 
 interface TgBotMethodsKeys {
@@ -21,6 +22,7 @@ export const restMethodsKeys: RestMethodsKeys = {
   GET_CURRENCY: '/currency',
   GET_SYMBOL: '/symbol',
   GET_CANDELS: '/candles',
+  CREATE_ORDER: '/order',
 }
 
 export const tgBotMethodsKeys: TgBotMethodsKeys = {
