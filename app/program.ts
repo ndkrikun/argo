@@ -1,6 +1,6 @@
 import { candlesAPI, ordersAPI, balanceAPI } from './api-hitbtc/index';
 import { telegramBot } from './api-telegram/index';
-import { MS_INTERVAL, TG_TEST_CHAT_ID, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY, CURRENCIES_PAIR } from './keys/main';
+import { MS_INTERVAL, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY, CURRENCIES_PAIR, TG_TEST_CHAT_ID } from './keys/main';
 import { Candle, CurrencyId, Balance } from './interfaces/currency.model';
 import { setInterval, clearInterval, setTimeout } from 'timers';
 import { macdSignal } from './algorithms/index';
@@ -64,12 +64,28 @@ export class Program {
       : orderSideCollection.SELL;
   }
 
-  private getRequiredCurrency(
+  /**
+   * Returns currency that is necessary before trade transaction
+   * @param solution analyze solution
+   */
+  private getTradeCurrency(
     solution: number[]
   ): CurrencyId {
     return solution[0] < solution[1]
       ? CURRENCIES_PAIR.quote
       : CURRENCIES_PAIR.base;
+  }
+
+  /**
+   * Returns currency that you own after trade transaction
+   * @param solution analyze solution
+   */
+  private getAfterTradeCurrency(
+    solution: number[]
+  ): CurrencyId {
+    return solution[0] < solution[1]
+      ? CURRENCIES_PAIR.base
+      : CURRENCIES_PAIR.quote;
   }
 
   /**
@@ -142,6 +158,35 @@ export class Program {
   }
 
   /**
+   * Send current balance amount
+   */
+  private sendCurrentBalance(solution: number[]): void {
+    balanceAPI.getBalance().then(balance => {
+      const currentBalance = balance.filter(el => {
+        el.currency === this.getAfterTradeCurrency(solution)
+      })[0];
+      telegramBot.sendMessage(
+        messageService.balanceMessage(currentBalance),
+        TG_CHAT_ID
+      );
+    });
+  }
+
+  /**
+   * Send order info message
+   */
+  private sendOrderMessage(
+    quantity: number,
+    currency: CurrencyId,
+    solution: number[]
+  ): void {
+    telegramBot.sendMessage(
+      messageService.orderMessage(quantity, currency, this.isPositiveTrend(solution)),
+      TG_CHAT_ID
+    );
+  }
+
+  /**
    * Analyze logic
    */
   private async analyze(): Promise<void> {
@@ -149,31 +194,25 @@ export class Program {
       this.candlesCollection
     );
 
-    this.sendCandleInfo(solution, TG_TEST_CHAT_ID);
-
     if (!this.isTrendChanged(solution)) { return; }
 
     this.sendTrendInfo(solution, TG_CHAT_ID);
 
     const balance = await balanceAPI.getBalance();
 
-    const currency = this.getRequiredCurrency(solution);
+    const currency = this.getTradeCurrency(solution);
 
     const quantity = this.getQuantity(solution, balance, currency);
 
-    console.log(`Quantity is ${quantity}`);
+    telegramBot.sendMessage(`Quantity: ${quantity}`, TG_TEST_CHAT_ID);
 
     if (quantity <= 0) { return; }
 
-    telegramBot.sendMessage(
-      messageService.orderMessage(quantity, currency, this.isPositiveTrend(solution)),
-      TG_CHAT_ID
-    );
+    this.sendOrderMessage(quantity, currency, solution);
 
-    ordersAPI.createOrder(
-      this.getOrderSide(solution),
-      quantity
-    );
+    ordersAPI.createOrder(this.getOrderSide(solution), quantity);
+
+    this.sendCurrentBalance(solution);
   }
 
   /**

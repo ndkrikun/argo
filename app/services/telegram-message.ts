@@ -1,4 +1,4 @@
-import { Candle, CurrencyId } from '../interfaces/currency.model';
+import { Candle, CurrencyId, Balance } from '../interfaces/currency.model';
 import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 import { emojiCollection } from '../keys/emoji';
 import { orderSideCollection } from '../keys/order';
@@ -29,6 +29,12 @@ export class MessageService {
     return lines.join('\n')
   }
 
+  public balanceMessage(
+    balance: Balance
+  ): string {
+    return `${emojiCollection.MONEY} Current <b>${balance.currency}</b> balance: <b>${balance.available}</b>`;
+  }
+
   public orderMessage(
     quantity: number,
     currency: CurrencyId,
@@ -37,7 +43,7 @@ export class MessageService {
     const trend = this.trendAction(isPositiveTrend);
     const lines = [
       `${trend} <b>${CURRENCIES_PAIR.base}</b>`,
-      `Ammount: ${quantity}`
+      `Amount: ${quantity}`
     ];
     return lines.join('\n');
   }

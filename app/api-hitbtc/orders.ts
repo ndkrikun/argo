@@ -3,9 +3,11 @@ import { CurrencySymbol, CurrenciesParams } from '../interfaces/currency.model';
 import { getSymbol } from '../services/helpers';
 import axios, { AxiosResponse } from 'axios';
 import { restMethodsKeys } from '../keys/methods';
-import { RestApiMethod } from '../interfaces/api.model';
-import { AUTH_REST_API_PATH } from '../keys/main';
+import { RestApiMethod, ApiError } from '../interfaces/api.model';
+import { AUTH_REST_API_PATH, TG_CHAT_ID } from '../keys/main';
 import { orderTypeCollection } from '../keys/order';
+import { telegramBot } from '../api-telegram/index';
+import { messageService } from '../services/index';
 
 interface ApiOrderParams {
   clientOrderId?: string;
@@ -63,11 +65,20 @@ export class OrdersAPI {
         this.getBody(side, quantity)
       )
       .then(response => {
-        console.log(response);
-        resolve(response.data.id)
+        if ('error' in response.data) {
+          telegramBot.sendMessage(
+            `${JSON.stringify(response.data)}\n${this.requestUrl}\n${this.getBody(side, quantity)}\n${this.method}`,
+            TG_CHAT_ID
+          );
+        } else {
+          resolve(response.data.id);
+        }
       })
       .catch((error) => {
-        console.log(`Failed to make an order. ${side} ${quantity}. ${error}`)
+        telegramBot.sendMessage(
+          `Failed to make an order\n${this.requestUrl}\n${this.getBody(side, quantity)}\n${error}`,
+          TG_CHAT_ID
+        );
       });
     });
   }
