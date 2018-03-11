@@ -25,7 +25,12 @@ export class BalanceAPI {
       axios.get<Balance[]>(
         this.requestUrl
       )
-      .then(response => resolve(response.data))
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        console.log(`Failed to get balance. ${error}`)
+      });
     });
   }
 

@@ -17,6 +17,9 @@ export class TelegramBot {
   ): void {
     axios.get(
       `${TG_API_PATH}${tgBotMethodsKeys.SEND_MESSAGE}?chat_id=${chatId}&text=${message}&parse_mode=HTML`
-    );
+    )
+    .catch((error) => {
+      console.log(`Failed to send a message. ${error}`)
+    });
   }
 }

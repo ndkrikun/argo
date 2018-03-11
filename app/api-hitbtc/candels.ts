@@ -52,6 +52,9 @@ export class CandlesAPI {
       .then((response) => {
         resolve(response.data);
       })
+      .catch((error) => {
+        console.log(`Failed to get ${quantity} candles. ${error}`)
+      });
     });
   }
 

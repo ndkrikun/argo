@@ -1,13 +1,17 @@
 export type CurrencyId = (
   'BTC' |
   'ETH' |
-  'USD'
+  'USD' |
+  'XRP' |
+  'TRX'
 )
 
 export type CurrencySymbol = (
   'ETHBTC' |
   'BTCETH' |
-  'ETHUSD'
+  'ETHUSD' |
+  'XRPUSD' |
+  'TRXUSD'
 );
 
 export interface Currency {

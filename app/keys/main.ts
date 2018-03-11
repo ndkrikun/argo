@@ -32,7 +32,7 @@ export const TG_TEST_CHAT_ID: string = '-291598333';
  */
 
 export const CURRENCIES_PAIR: CurrenciesParams = {
-  base: 'ETH',
+  base: 'TRX',
   quote: 'USD'
 };
 

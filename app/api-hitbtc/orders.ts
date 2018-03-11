@@ -12,7 +12,7 @@ interface ApiOrderParams {
   symbol: CurrencySymbol;
   side: OrderSide;
   type?: OrderType;
-  timeInForce?: TimeForce;    
+  timeInForce?: TimeForce;
   quantity: number;
   price?: number;
   stopPrice?: number;
@@ -27,7 +27,7 @@ interface ApiOrderResponse extends ApiOrderParams {
 export class OrdersAPI {
 
   private readonly eventName = restMethodsKeys.CREATE_ORDER;
-  private readonly method: RestApiMethod = 'GET';
+  private readonly method: RestApiMethod = 'POST';
 
   constructor(
     private readonly currencies: CurrenciesParams
@@ -39,11 +39,11 @@ export class OrdersAPI {
 
   private get requestUrl(): string {
     return (
-      AUTH_REST_API_PATH + this.eventName + '/' + this.symbol
+      AUTH_REST_API_PATH + this.eventName
     );
   }
 
-  private getParams(side: OrderSide, quantity: number): ApiOrderParams {
+  private getBody(side: OrderSide, quantity: number): ApiOrderParams {
     return {
       symbol: this.symbol,
       side,
@@ -58,11 +58,17 @@ export class OrdersAPI {
     quantity: number
   ) {
     return new Promise<number>(resolve => {
-      axios.get<ApiOrderResponse>(
+      axios.post<ApiOrderResponse>(
         this.requestUrl,
-        { params: this.getParams(side, quantity) }
+        this.getBody(side, quantity)
       )
-      .then(response => resolve(response.data.id));
+      .then(response => {
+        console.log(response);
+        resolve(response.data.id)
+      })
+      .catch((error) => {
+        console.log(`Failed to make an order. ${side} ${quantity}. ${error}`)
+      });
     });
   }
 }

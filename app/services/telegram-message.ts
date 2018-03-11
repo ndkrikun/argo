@@ -1,4 +1,4 @@
-import { Candle } from '../interfaces/currency.model';
+import { Candle, CurrencyId } from '../interfaces/currency.model';
 import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 import { emojiCollection } from '../keys/emoji';
 import { orderSideCollection } from '../keys/order';
@@ -10,7 +10,7 @@ export class MessageService {
   ): string {
     const orderType: OrderSide = isPositiveTrend ? orderSideCollection.BUY : orderSideCollection.SELL;
     const orderTypeEmoji = isPositiveTrend ? emojiCollection.BUY : emojiCollection.SELL;
-    return `${orderTypeEmoji} ${orderType.toUpperCase()}!`;
+    return `${orderTypeEmoji} ${orderType.toUpperCase()}`;
   }
 
   public trendMessage(
@@ -20,13 +20,26 @@ export class MessageService {
   ): string {
     const trend = this.trendAction(isPositiveTrend);
     const lines = [
-      `<b>${trend}</b> The trend was changed! From <b>${solution[0]}</b> to <b>${solution[1]}</b>`,
+      `<b>${trend}!</b> The trend was changed! From <b>${solution[0]}</b> to <b>${solution[1]}</b>`,
       `Currency pair: <b>${CURRENCIES_PAIR.base}${CURRENCIES_PAIR.quote}.</b>`,
       `Open price: <b>${candle.open}</b>.`,
       `Close price: <b>${candle.close}</b>.`,
       `Time stamp: <b>${candle.timestamp}</b>.`
     ]
     return lines.join('\n')
+  }
+
+  public orderMessage(
+    quantity: number,
+    currency: CurrencyId,
+    isPositiveTrend: boolean
+  ): string {
+    const trend = this.trendAction(isPositiveTrend);
+    const lines = [
+      `${trend} <b>${CURRENCIES_PAIR.base}</b>`,
+      `Ammount: ${quantity}`
+    ];
+    return lines.join('\n');
   }
 
   public candleMessage(
@@ -52,6 +65,6 @@ export class MessageService {
   }
 
   public get startProgram(): string {
-    return `${emojiCollection.NOTIFY} The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles was fetched.\n\n ${emojiCollection.BOT} Starting the bot...`
+    return `${emojiCollection.NOTIFY} The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles were fetched.\n\n ${emojiCollection.BOT} Starting the bot...`
   }
 }
