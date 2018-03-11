@@ -46,6 +46,12 @@ export interface Candle {
 }
 
 export interface CurrenciesParams {
-  base: CurrencyId,
-  quote: CurrencyId
+  base: CurrencyId;
+  quote: CurrencyId;
+}
+
+export interface Balance {
+  currency: CurrencyId;
+  available: string;
+  reserved: string;
 }

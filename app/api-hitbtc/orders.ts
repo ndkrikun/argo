@@ -12,7 +12,7 @@ interface ApiOrderParams {
   symbol: CurrencySymbol;
   side: OrderSide;
   type?: OrderType;
-  timeInForce?: TimeForce;
+  timeInForce?: TimeForce;    
   quantity: number;
   price?: number;
   stopPrice?: number;
@@ -43,27 +43,26 @@ export class OrdersAPI {
     );
   }
 
-  private getParams(side: OrderSide): ApiOrderParams {
+  private getParams(side: OrderSide, quantity: number): ApiOrderParams {
     return {
       symbol: this.symbol,
       side,
       type: orderTypeCollection.MARKET,
-      quantity: NaN,
+      quantity,
       strictValidate: true
     }
   }
 
   public createOrder(
-    side: OrderSide
+    side: OrderSide,
+    quantity: number
   ) {
     return new Promise<number>(resolve => {
       axios.get<ApiOrderResponse>(
         this.requestUrl,
-        { params: this.getParams(side) }
+        { params: this.getParams(side, quantity) }
       )
-      .then((response) => {
-        resolve(response.data.id);
-      })
+      .then(response => resolve(response.data.id));
     });
   }
 }

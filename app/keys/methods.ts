@@ -7,6 +7,7 @@ interface RestMethodsKeys {
   GET_SYMBOL: string;
   GET_CANDELS: string;
   CREATE_ORDER: string;
+  GET_BALANCE: string;
 }
 
 interface TgBotMethodsKeys {
@@ -23,6 +24,7 @@ export const restMethodsKeys: RestMethodsKeys = {
   GET_SYMBOL: '/symbol',
   GET_CANDELS: '/candles',
   CREATE_ORDER: '/order',
+  GET_BALANCE: '/trading/balance',
 }
 
 export const tgBotMethodsKeys: TgBotMethodsKeys = {
