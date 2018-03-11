@@ -4,7 +4,7 @@ import { getSymbol } from '../services/helpers';
 import axios, { AxiosResponse } from 'axios';
 import { restMethodsKeys } from '../keys/methods';
 import { RestApiMethod, ApiError } from '../interfaces/api.model';
-import { AUTH_REST_API_PATH, TG_CHAT_ID } from '../keys/main';
+import { AUTH_REST_API_PATH, TG_CHAT_ID, TG_TEST_CHAT_ID } from '../keys/main';
 import { orderTypeCollection } from '../keys/order';
 import { telegramBot } from '../api-telegram/index';
 import { messageService } from '../services/index';
@@ -59,24 +59,20 @@ export class OrdersAPI {
     side: OrderSide,
     quantity: number
   ) {
-    return new Promise<number>(resolve => {
+    return new Promise<void>(resolve => {
       axios.post<ApiOrderResponse>(
         this.requestUrl,
         this.getBody(side, quantity)
       )
       .then(response => {
-        if ('error' in response.data) {
-          telegramBot.sendMessage(
-            `${JSON.stringify(response.data)}\n${this.requestUrl}\n${this.getBody(side, quantity)}\n${this.method}`,
-            TG_CHAT_ID
-          );
-        } else {
-          resolve(response.data.id);
-        }
+        telegramBot.sendMessage(
+          `${JSON.stringify(response.data)}\n${JSON.stringify(this.getBody(side, quantity))}\n${this.method}`,
+          TG_TEST_CHAT_ID
+        );
       })
       .catch((error) => {
         telegramBot.sendMessage(
-          `Failed to make an order\n${this.requestUrl}\n${this.getBody(side, quantity)}\n${error}`,
+          `Failed to make an order\n${JSON.stringify(this.getBody(side, quantity))}\n${error}`,
           TG_CHAT_ID
         );
       });

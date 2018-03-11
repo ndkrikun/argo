@@ -139,6 +139,7 @@ export class Program {
     /**
      * @TODO: Remove hardcode
      * Take increment from GET /api/2/public/symbol/{symbol} API
+     * Make more clear calculations with a help of fee formula
      */
     const increment = 100;
 
@@ -150,7 +151,7 @@ export class Program {
     );
 
     if (this.isPositiveTrend(solution)) {
-      const quantity = ((currencyBalance / Number(this.lastCandle.close)) - (increment * 2));
+      const quantity = ((currencyBalance / Number(this.lastCandle.close)) - (increment * 4));
       return Math.ceil((Math.ceil(quantity) / increment)) * increment;
     }
 

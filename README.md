@@ -6,9 +6,9 @@ https://api.hitbtc.com/
 
 ## AWS Tips
 
-- Enter server via terminal
-`ssh -i ~/.ssh/MyKeyPair.pem ec2-user@54.87.174.98`
+- Start via
+`ts-node ./index.js`
 
-- Kill nodejs process
+- Stop process via
 `pkill -f node`
 `pkill -f nodejs`
