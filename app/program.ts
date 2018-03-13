@@ -1,4 +1,4 @@
-import { candlesAPI, ordersAPI, balanceAPI, symbolsAPI } from './api-hitbtc/index';
+import { candlesAPI, ordersAPI, balanceAPI, symbolsAPI, tickersAPI } from './api-hitbtc/index';
 import { telegramBot } from './api-telegram/index';
 import { MS_INTERVAL, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY, CURRENCIES_PAIR, TG_TEST_CHAT_ID } from './keys/main';
 import { Candle, CurrencyId, Balance, CurrencySymbolData } from './interfaces/currency.model';
@@ -124,6 +124,15 @@ export class Program {
   }
 
   /**
+   * Fee of the symbol
+   */
+  private get currencyFee(): number {
+    return !!this.symbolData
+      ? Number(this.symbolData.takeLiquidityRate)
+      : 0;
+  }
+
+  /**
    * Returns quantity for order
    * @param solution analyze silution
    * @param balance trading balance
@@ -144,7 +153,9 @@ export class Program {
     );
 
     if (this.isPositiveTrend(solution)) {
-      const quantity = currencyBalance / Number(this.lastCandle.close);
+      const balanceWithFee = currencyBalance * (1 - this.currencyFee);
+      const bestAsk = Number(tickersAPI.tickerData.ask);
+      const quantity = balanceWithFee / bestAsk;
       return (Math.ceil((Math.ceil(quantity) / increment)) * increment) - increment;
     }
 
@@ -233,7 +244,7 @@ export class Program {
    * Init bot
    */
   private async startBot(): Promise<void> {
-    telegramBot.sendMessage(messageService.startProgram, TG_CHAT_ID);
+    telegramBot.sendMessage(messageService.startProgram(this.symbolData), TG_CHAT_ID);
 
     this.candlesCollection = await candlesAPI.getCandels(
       CANDLES_INITIAL_QUANTITY

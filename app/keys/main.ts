@@ -14,7 +14,7 @@ export const REST_API_PATH: string =  'https://api.hitbtc.com/api/2/public';
 
 export const AUTH_REST_API_PATH: string = `https://${PUBLIC_API_TOKEN}:${SECRET_API_TOKEN}@api.hitbtc.com/api/2`
 
-export const DEFAULT_ID: number = 123;
+export const SOKET_DEFAULT_ID: number = 123;
 
 /**
  * TELEGRAM BOT API KEYS

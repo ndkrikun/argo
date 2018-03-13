@@ -1,4 +1,4 @@
-import { Candle, CurrencyId, Balance } from '../interfaces/currency.model';
+import { Candle, CurrencyId, Balance, CurrencySymbolData } from '../interfaces/currency.model';
 import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 import { emojiCollection } from '../keys/emoji';
 import { orderSideCollection } from '../keys/order';
@@ -91,11 +91,18 @@ export class MessageService {
     return `${emojiCollection.WAITING} <b>Waiting for the last candle...</b>`;
   }
 
-  public get startProgram(): string {
+  public startProgram(symbolData: CurrencySymbolData): string {
+    const currencyInfo = Object.keys(symbolData).map(key =>
+      `<b>${key}:</b> ${symbolData[key]}`
+    );
+    const currencyLines = [
+      `<b>Currency pair info:</b>`
+    ].concat(currencyInfo).join('\n');
+
     const lines = [
       `${emojiCollection.NOTIFY} The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles were fetched.`,
       `${emojiCollection.BOT} Starting the bot with <b>${CURRENCIES_PAIR.symbol}</b> symbol...`
     ];
-    return lines.join('\n\n');
+    return lines.concat(currencyLines).join('\n\n');
   }
 }
