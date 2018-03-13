@@ -60,19 +60,25 @@ export class OrdersAPI {
     quantity: number
   ) {
     return new Promise<void>(resolve => {
+      const body = this.getBody(side, quantity);
       axios.post<ApiOrderResponse>(
         this.requestUrl,
-        this.getBody(side, quantity)
+        body
       )
       .then(response => {
         telegramBot.sendMessage(
-          `${JSON.stringify(response.data)}\n${JSON.stringify(this.getBody(side, quantity))}\n${this.method}`,
+          messageService.requestLogMessage(
+            this.method,
+            this.eventName,
+            body,
+            response.data
+          ),
           TG_TEST_CHAT_ID
         );
       })
       .catch((error) => {
         telegramBot.sendMessage(
-          `Failed to make an order\n${JSON.stringify(this.getBody(side, quantity))}\n${error}`,
+          `Failed to make an order\n${JSON.stringify(body)}\n${error}`,
           TG_CHAT_ID
         );
       });

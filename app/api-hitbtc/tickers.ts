@@ -1,4 +1,4 @@
-import { Currency, CurrencyId, CurrenciesParams, CurrencySymbol, Ticker } from '../interfaces/currency.model';
+import { CurrenciesParams, CurrencySymbol, Ticker } from '../interfaces/currency.model';
 import { WS_API_PATH, DEFAULT_ID } from '../keys/main';
 import { w3cwebsocket as WebSocket } from 'websocket';
 import { Socket } from 'dgram';

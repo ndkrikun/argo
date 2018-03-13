@@ -3,6 +3,7 @@ import { CURRENCIES_PAIR, CANDLES_INITIAL_QUANTITY } from '../keys/main';
 import { emojiCollection } from '../keys/emoji';
 import { orderSideCollection } from '../keys/order';
 import { OrderSide } from '../interfaces/order.model';
+import { RestApiMethod } from '../interfaces/api.model';
 
 export class MessageService {
   private trendAction(
@@ -27,6 +28,20 @@ export class MessageService {
       `Time stamp: <b>${candle.timestamp}</b>.`
     ]
     return lines.join('\n')
+  }
+
+  public requestLogMessage(
+    method: RestApiMethod,
+    eventName: string,
+    body: object,
+    response: object
+  ): string {
+    const lines = [
+      `${emojiCollection.REQUEST} <b>[${method.toUpperCase()}]</b> ${eventName}`,
+      `<b>Request body:</b> \n${JSON.stringify(body)}`,
+      `<b>Request response:</b> \n${JSON.stringify(response)}`,
+    ];
+    return lines.join('\n\n');
   }
 
   public balanceMessage(

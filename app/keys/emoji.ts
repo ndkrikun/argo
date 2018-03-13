@@ -6,6 +6,7 @@ interface EmojiCollection {
   BUY: string;
   SELL: string;
   MONEY: string;
+  REQUEST: string;
 }
 
 export const emojiCollection: EmojiCollection = {
@@ -15,5 +16,6 @@ export const emojiCollection: EmojiCollection = {
   BOT: '\xF0\x9F\x91\xBE',
   BUY: '\xE2\x9C\x85',
   SELL: '\xE2\x9D\x8C',
-  MONEY: '\xF0\x9F\x92\xB0'
+  MONEY: '\xF0\x9F\x92\xB0',
+  REQUEST: '\xF0\x9F\x94\x81'
 };
