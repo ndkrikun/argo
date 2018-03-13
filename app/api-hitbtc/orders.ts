@@ -51,7 +51,7 @@ export class OrdersAPI {
       side,
       type: orderTypeCollection.MARKET,
       quantity,
-      strictValidate: true
+      strictValidate: false
     }
   }
 

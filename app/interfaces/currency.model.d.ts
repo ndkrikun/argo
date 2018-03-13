@@ -59,3 +59,14 @@ export interface Balance {
   available: string;
   reserved: string;
 }
+
+export interface CurrencySymbolData {
+  id: CurrencySymbol;
+  baseCurrency: CurrencyId;
+  quoteCurrency: CurrencyId;
+  quantityIncrement: string;
+  tickSize: string;
+  takeLiquidityRate: string;
+  provideLiquidityRate: string;
+  feeCurrency: CurrencyId;
+}

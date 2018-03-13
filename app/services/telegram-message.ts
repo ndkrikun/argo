@@ -30,9 +30,15 @@ export class MessageService {
   }
 
   public balanceMessage(
-    balance: Balance
+    balance: Balance[]
   ): string {
-    return `${emojiCollection.MONEY} Current <b>${balance.currency}</b> balance: <b>${balance.available}</b>`;
+    const lines = balance.reduce((acc, currencyBalance) => {
+      acc.push(
+        `${emojiCollection.MONEY} <b>${currencyBalance.currency}</b> balance: <b>${currencyBalance.available}</b>`
+      );
+      return acc;
+    }, []);
+    return lines.join('\n');
   }
 
   public orderMessage(

@@ -1,7 +1,7 @@
-import { candlesAPI, ordersAPI, balanceAPI } from './api-hitbtc/index';
+import { candlesAPI, ordersAPI, balanceAPI, symbolsAPI } from './api-hitbtc/index';
 import { telegramBot } from './api-telegram/index';
 import { MS_INTERVAL, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY, CURRENCIES_PAIR, TG_TEST_CHAT_ID } from './keys/main';
-import { Candle, CurrencyId, Balance } from './interfaces/currency.model';
+import { Candle, CurrencyId, Balance, CurrencySymbolData } from './interfaces/currency.model';
 import { setInterval, clearInterval, setTimeout } from 'timers';
 import { macdSignal } from './algorithms/index';
 import { messageService } from './services/index';
@@ -9,12 +9,13 @@ import { orderSideCollection } from './keys/order';
 import { OrderSide } from './interfaces/order.model';
 
 export class Program {
+  private symbolData: CurrencySymbolData;
   private candlesCollection: Candle[];
   private waitingTimer: NodeJS.Timer;
   private programTimer: NodeJS.Timer;
 
   constructor() {
-    this.init();
+    this.startServer();
   }
 
   /**
@@ -77,18 +78,6 @@ export class Program {
   }
 
   /**
-   * Returns currency that you own after trade transaction
-   * @param solution analyze solution
-   */
-  private getAfterTradeCurrency(
-    solution: number[]
-  ): CurrencyId {
-    return solution[0] < solution[1]
-      ? CURRENCIES_PAIR.base
-      : CURRENCIES_PAIR.quote;
-  }
-
-  /**
    * Tells if trend is positive
    * @param solution analyze solution
    */
@@ -126,6 +115,15 @@ export class Program {
   }
 
   /**
+   * Increment of base currency
+   */
+  private get currencyIncrement(): number {
+    return !!this.symbolData
+      ? Number(this.symbolData.quantityIncrement)
+      : 0;
+  }
+
+  /**
    * Returns quantity for order
    * @param solution analyze silution
    * @param balance trading balance
@@ -136,12 +134,7 @@ export class Program {
     balance: Balance[],
     currency: CurrencyId
   ): number {
-    /**
-     * @TODO: Remove hardcode
-     * Take increment from GET /api/2/public/symbol/{symbol} API
-     * Make more clear calculations with a help of fee formula
-     */
-    const increment = 100;
+    const increment = this.currencyIncrement;
 
     const currencyBalance = balance.reduce((acc, el) =>
       el.currency === currency
@@ -151,8 +144,8 @@ export class Program {
     );
 
     if (this.isPositiveTrend(solution)) {
-      const quantity = ((currencyBalance / Number(this.lastCandle.close)) - (increment * 4));
-      return Math.ceil((Math.ceil(quantity) / increment)) * increment;
+      const quantity = currencyBalance / Number(this.lastCandle.close);
+      return (Math.ceil((Math.ceil(quantity) / increment)) * increment) - increment;
     }
 
     return currencyBalance;
@@ -161,16 +154,15 @@ export class Program {
   /**
    * Send current balance amount
    */
-  private sendCurrentBalance(solution: number[]): void {
-    balanceAPI.getBalance().then(balance => {
-      const currentBalance = balance.filter(el => {
-        el.currency === this.getAfterTradeCurrency(solution)
-      })[0];
-      telegramBot.sendMessage(
-        messageService.balanceMessage(currentBalance),
-        TG_CHAT_ID
-      );
-    });
+  private sendBalanceInfo(balance: Balance[]): void {
+    const currenciesBalance = balance.filter(el =>
+      el.currency === CURRENCIES_PAIR.base ||
+      el.currency === CURRENCIES_PAIR.quote
+    );
+    telegramBot.sendMessage(
+      messageService.balanceMessage(currenciesBalance),
+      TG_CHAT_ID
+    );
   }
 
   /**
@@ -205,40 +197,42 @@ export class Program {
 
     const quantity = this.getQuantity(solution, balance, currency);
 
-    telegramBot.sendMessage(`Quantity: ${quantity}`, TG_TEST_CHAT_ID);
-
-    if (quantity <= 0) { return; }
+    if (quantity <= this.currencyIncrement) { return; }
 
     this.sendOrderMessage(quantity, currency, solution);
 
-    ordersAPI.createOrder(this.getOrderSide(solution), quantity);
+    await ordersAPI.createOrder(this.getOrderSide(solution), quantity);
 
-    this.sendCurrentBalance(solution);
+    const balanceAfterTransaction = await balanceAPI.getBalance();
+
+    this.sendBalanceInfo(balanceAfterTransaction);
   }
 
   /**
-   * Tells if app is ready to start
+   * Tells if bot is ready to start
    */
   private get readyToStart(): boolean {
     const second = new Date().getSeconds();
-    return (second === 0
-      ||    second === 1);
+    return (
+      second === 0 ||
+      second === 1
+    );
   }
 
   /**
-   * Step before app was start
+   * Step before bot activation
    */
   private waitingStep(): void {
     if (this.readyToStart) {
       clearInterval(this.waitingTimer);
-      this.start();
+      this.startBot();
     }
   }
 
   /**
-   * Init application
+   * Init bot
    */
-  private async start(): Promise<void> {
+  private async startBot(): Promise<void> {
     telegramBot.sendMessage(messageService.startProgram, TG_CHAT_ID);
 
     this.candlesCollection = await candlesAPI.getCandels(
@@ -256,17 +250,19 @@ export class Program {
   /**
    * Init server
    */
-  private init(): void {
+  private async startServer(): Promise<void> {
+    this.symbolData = await symbolsAPI.getSymbol();
+
     telegramBot.sendMessage(messageService.startServer, TG_CHAT_ID);
 
     if (this.readyToStart) {
-      this.start();
+      this.startBot();
       return;
     }
 
     setTimeout(
       () => telegramBot.sendMessage(messageService.waiting, TG_CHAT_ID),
-      10
+      100
     );
 
     this.waitingTimer = setInterval(
