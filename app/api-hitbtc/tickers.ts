@@ -1,5 +1,5 @@
 import { CurrenciesParams, CurrencySymbol, Ticker } from '../interfaces/currency.model';
-import { WS_API_PATH, DEFAULT_ID } from '../keys/main';
+import { WS_API_PATH, DEFAULT_ID, CURRENCIES_PAIR } from '../keys/main';
 import { w3cwebsocket as WebSocket } from 'websocket';
 import { Socket } from 'dgram';
 import { ApiResponse, ApiError } from '../interfaces/api.model';
@@ -17,15 +17,9 @@ export class TickersAPI {
   private readonly eventName = wsMethodsKeys.SUBSCRIBE_TICKER;
 
   public tickerData: Ticker | null = null;
-  
-  constructor(
-    private currencies: CurrenciesParams
-  ) {}
 
   private get symbol(): CurrencySymbol {
-    return (
-      this.currencies.base + this.currencies.quote
-    ) as CurrencySymbol;
+    return CURRENCIES_PAIR.symbol;
   }
 
   private get apiParams(): ApiTickerParams {

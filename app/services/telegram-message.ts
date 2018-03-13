@@ -92,6 +92,10 @@ export class MessageService {
   }
 
   public get startProgram(): string {
-    return `${emojiCollection.NOTIFY} The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles were fetched.\n\n ${emojiCollection.BOT} Starting the bot...`
+    const lines = [
+      `${emojiCollection.NOTIFY} The last <b>${CANDLES_INITIAL_QUANTITY}</b> candles were fetched.`,
+      `${emojiCollection.BOT} Starting the bot with <b>${CURRENCIES_PAIR.symbol}</b> symbol...`
+    ];
+    return lines.join('\n\n');
   }
 }

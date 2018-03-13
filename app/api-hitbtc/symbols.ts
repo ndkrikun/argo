@@ -1,9 +1,8 @@
 import { restMethodsKeys } from '../keys/methods';
-import { CurrenciesParams, CurrencySymbol, CurrencySymbolData } from '../interfaces/currency.model';
+import { CurrencySymbol, CurrencySymbolData } from '../interfaces/currency.model';
 import axios from 'axios';
-import { REST_API_PATH, TG_CHAT_ID } from '../keys/main';
+import { REST_API_PATH, TG_CHAT_ID, CURRENCIES_PAIR } from '../keys/main';
 import { RestApiMethod } from '../interfaces/api.model';
-import { getSymbol } from '../services/helpers';
 import { telegramBot } from '../api-telegram/index';
 
 const QueryString = require('query-string')
@@ -12,12 +11,8 @@ export class SymbolsAPI {
   private readonly eventName = restMethodsKeys.GET_SYMBOL;
   private readonly method: RestApiMethod = 'GET';
 
-  constructor(
-    private readonly currencies: CurrenciesParams
-  ) { }
-
   private get symbol(): CurrencySymbol {
-    return getSymbol(this.currencies);
+    return CURRENCIES_PAIR.symbol;
   }
 
   private get requestUrl(): string {

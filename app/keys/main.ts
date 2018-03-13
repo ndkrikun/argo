@@ -30,10 +30,10 @@ export const TG_TEST_CHAT_ID: string = '-291598333';
 /**
  * APP SETTINGS
  */
-
 export const CURRENCIES_PAIR: CurrenciesParams = {
   base: 'TRX',
-  quote: 'USD'
+  quote: 'USD',
+  symbol: 'TRXUSD'
 };
 
 /**

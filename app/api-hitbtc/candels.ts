@@ -1,9 +1,8 @@
 import { restMethodsKeys } from '../keys/methods';
 import { CurrenciesParams, CurrencySymbol, Candle } from '../interfaces/currency.model';
 import axios, { AxiosResponse } from 'axios';
-import { REST_API_PATH, CANDLES_PERIOD } from '../keys/main';
+import { REST_API_PATH, CANDLES_PERIOD, CURRENCIES_PAIR } from '../keys/main';
 import { RestApiMethod } from '../interfaces/api.model';
-import { getSymbol } from '../services/helpers';
 
 const QueryString = require('query-string')
 
@@ -18,12 +17,8 @@ export class CandlesAPI {
 
   private readonly period: string = CANDLES_PERIOD;
 
-  constructor(
-    private readonly currencies: CurrenciesParams
-  ) {}
-
   private get symbol(): CurrencySymbol {
-    return getSymbol(this.currencies);
+    return CURRENCIES_PAIR.symbol;
   }
 
   private getParams(

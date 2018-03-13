@@ -5,12 +5,12 @@ import { OrdersAPI } from './orders';
 import { BalanceAPI } from './balance';
 import { SymbolsAPI } from './symbols';
 
-export const tickersAPI = new TickersAPI(CURRENCIES_PAIR);
+export const tickersAPI = new TickersAPI;
 
-export const candlesAPI = new CandlesAPI(CURRENCIES_PAIR);
+export const candlesAPI = new CandlesAPI;
 
-export const ordersAPI = new OrdersAPI(CURRENCIES_PAIR);
+export const ordersAPI = new OrdersAPI;
 
-export const balanceAPI = new BalanceAPI(CURRENCIES_PAIR);
+export const balanceAPI = new BalanceAPI;
 
-export const symbolsAPI = new SymbolsAPI(CURRENCIES_PAIR);
+export const symbolsAPI = new SymbolsAPI;

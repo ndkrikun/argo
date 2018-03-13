@@ -1,10 +1,9 @@
 import { OrderSide, OrderType, TimeForce } from '../interfaces/order.model';
-import { CurrencySymbol, CurrenciesParams } from '../interfaces/currency.model';
-import { getSymbol } from '../services/helpers';
+import { CurrencySymbol } from '../interfaces/currency.model';
 import axios, { AxiosResponse } from 'axios';
 import { restMethodsKeys } from '../keys/methods';
 import { RestApiMethod, ApiError } from '../interfaces/api.model';
-import { AUTH_REST_API_PATH, TG_CHAT_ID, TG_TEST_CHAT_ID } from '../keys/main';
+import { AUTH_REST_API_PATH, TG_CHAT_ID, TG_TEST_CHAT_ID, CURRENCIES_PAIR } from '../keys/main';
 import { orderTypeCollection } from '../keys/order';
 import { telegramBot } from '../api-telegram/index';
 import { messageService } from '../services/index';
@@ -31,12 +30,8 @@ export class OrdersAPI {
   private readonly eventName = restMethodsKeys.CREATE_ORDER;
   private readonly method: RestApiMethod = 'POST';
 
-  constructor(
-    private readonly currencies: CurrenciesParams
-  ) {}
-
   private get symbol(): CurrencySymbol {
-    return getSymbol(this.currencies);
+    return CURRENCIES_PAIR.symbol;
   }
 
   private get requestUrl(): string {

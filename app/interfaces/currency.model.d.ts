@@ -10,7 +10,7 @@ export type CurrencySymbol = (
   'ETHBTC' |
   'BTCETH' |
   'ETHUSD' |
-  'XRPUSD' |
+  'XRPUSDT' |
   'TRXUSD'
 );
 
@@ -52,6 +52,7 @@ export interface Candle {
 export interface CurrenciesParams {
   base: CurrencyId;
   quote: CurrencyId;
+  symbol: CurrencySymbol;
 }
 
 export interface Balance {
