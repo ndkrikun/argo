@@ -4,9 +4,9 @@ import { CurrenciesParams } from '../interfaces/currency.model';
  * HIT BTC API KEYS
  */
 
-export const PUBLIC_API_TOKEN: string = 'f5150f1c0b4f407a0f14247fd487f89e';
+export const PUBLIC_API_TOKEN: string = 'b3159a2166092bff8b5bf03a09b573d9';
 
-export const SECRET_API_TOKEN: string = 'cd5f4b960c4bd4032682f018a80f7d9e';
+export const SECRET_API_TOKEN: string = '50bf3e04b289c28fa0614cfacdaf1fb1';
 
 export const WS_API_PATH: string = 'wss://api.hitbtc.com/api/2/ws';
 
