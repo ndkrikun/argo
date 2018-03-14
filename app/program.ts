@@ -144,7 +144,10 @@ export class Program {
     solution: number[],
     balance: Balance[],
     currency: CurrencyId
-  ): number {
+  ): { quantity: number, price: number } {
+    /**
+     * @todo refactor
+     */
     const increment = this.currencyIncrement;
 
     const currencyBalance = balance.reduce((acc, el) =>
@@ -154,14 +157,21 @@ export class Program {
       0
     );
 
+    const bestAsk = Number(this.tickersSoket.tickerData.ask);
+
     if (this.isPositiveTrend(solution)) {
       const balanceWithFee = currencyBalance * (1 - this.currencyFee);
-      const bestAsk = Number(this.tickersSoket.tickerData.ask);
       const quantity = balanceWithFee / bestAsk;
-      return (Math.ceil((Math.ceil(quantity) / increment)) * increment) - increment;
+      return {
+        quantity: (Math.ceil((Math.ceil(quantity) / increment)) * increment) - increment,
+        price: bestAsk
+      };
     }
 
-    return currencyBalance;
+    return {
+      quantity: currencyBalance,
+      price: bestAsk
+    };
   }
 
   /**
@@ -208,13 +218,13 @@ export class Program {
 
     const currency = this.getTradeCurrency(solution);
 
-    const quantity = this.getQuantity(solution, balance, currency);
+    const { quantity, price } = this.getQuantity(solution, balance, currency);
 
     if (quantity <= this.currencyIncrement) { return; }
 
     this.sendOrderMessage(quantity, currency, solution);
 
-    await ordersAPI.createOrder(this.getOrderSide(solution), quantity);
+    await ordersAPI.createOrder(this.getOrderSide(solution), quantity, price);
 
     const balanceAfterTransaction = await balanceAPI.getBalance();
 

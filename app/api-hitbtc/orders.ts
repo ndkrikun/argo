@@ -40,21 +40,23 @@ export class OrdersAPI {
     );
   }
 
-  private getBody(side: OrderSide, quantity: number): ApiOrderParams {
+  private getBody(side: OrderSide, quantity: number, stopPrice: number): ApiOrderParams {
     return {
       symbol: this.symbol,
       side,
       type: orderTypeCollection.STOP_MARKET,
-      quantity
+      quantity,
+      stopPrice
     }
   }
 
   public createOrder(
     side: OrderSide,
-    quantity: number
+    quantity: number,
+    stopPrice: number
   ) {
     return new Promise<void>(resolve => {
-      const body = this.getBody(side, quantity);
+      const body = this.getBody(side, quantity, stopPrice);
       axios.post<ApiOrderResponse>(
         this.requestUrl,
         body
