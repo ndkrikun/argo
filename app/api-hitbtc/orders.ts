@@ -18,7 +18,7 @@ interface ApiOrderParams {
   price?: number;
   stopPrice?: number;
   expireTime?: Date;
-  strictValidate: boolean;
+  strictValidate?: boolean;
 }
 
 interface ApiOrderResponse extends ApiOrderParams {
@@ -44,9 +44,8 @@ export class OrdersAPI {
     return {
       symbol: this.symbol,
       side,
-      type: orderTypeCollection.MARKET,
-      quantity,
-      strictValidate: false
+      type: orderTypeCollection.STOP_MARKET,
+      quantity
     }
   }
 
