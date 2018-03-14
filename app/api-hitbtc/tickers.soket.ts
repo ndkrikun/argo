@@ -12,11 +12,15 @@ interface ApiTickerParams {
   id: number;
 }
 
-export class TickersAPI {
+export class TickersSoketAPI {
   private readonly soket = new WebSocket(WS_API_PATH);
   private readonly eventName = wsMethodsKeys.SUBSCRIBE_TICKER;
 
   public tickerData: Ticker = null;
+
+  constructor() {
+    this.init();
+  }
 
   private get symbol(): CurrencySymbol {
     return CURRENCIES_PAIR.symbol;

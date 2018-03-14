@@ -1,4 +1,4 @@
-import { candlesAPI, ordersAPI, balanceAPI, symbolsAPI, tickersAPI } from './api-hitbtc/index';
+import { candlesAPI, ordersAPI, balanceAPI, symbolsAPI } from './api-hitbtc/index';
 import { telegramBot } from './api-telegram/index';
 import { MS_INTERVAL, TG_CHAT_ID, CANDLES_INITIAL_QUANTITY, CURRENCIES_PAIR, TG_TEST_CHAT_ID } from './keys/main';
 import { Candle, CurrencyId, Balance, CurrencySymbolData } from './interfaces/currency.model';
@@ -7,8 +7,10 @@ import { macdSignal } from './algorithms/index';
 import { messageService } from './services/index';
 import { orderSideCollection } from './keys/order';
 import { OrderSide } from './interfaces/order.model';
+import { TickersSoketAPI } from './api-hitbtc/tickers.soket';
 
 export class Program {
+  private tickersSoket = new TickersSoketAPI;
   private symbolData: CurrencySymbolData;
   private candlesCollection: Candle[];
   private waitingTimer: NodeJS.Timer;
@@ -154,7 +156,7 @@ export class Program {
 
     if (this.isPositiveTrend(solution)) {
       const balanceWithFee = currencyBalance * (1 - this.currencyFee);
-      const bestAsk = Number(tickersAPI.tickerData.ask);
+      const bestAsk = Number(this.tickersSoket.tickerData.ask);
       const quantity = balanceWithFee / bestAsk;
       return (Math.ceil((Math.ceil(quantity) / increment)) * increment) - increment;
     }
